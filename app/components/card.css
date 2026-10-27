@@ -1,0 +1,29 @@
+.card{
+    width: 400px;
+    height: 400px;
+    background-color: #f2f2f2;
+    border-radius: 15px;
+}
+
+.card img{
+    width: 100%;
+}
+
+.card-title{
+    color: blueviolet;
+}
+
+.card-text{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 100px;
+    padding: 10px;
+
+}
+
+.card-swiper {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}

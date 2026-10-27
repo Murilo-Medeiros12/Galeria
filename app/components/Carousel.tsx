@@ -1,73 +1,41 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { posts } from "../data/slideData";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { slideImages } from "../data/dataCarousel";
 
 export default function Carousel() {
-  const [perPage, setPerPage] = useState(3);
-  const [page, setPage] = useState(0);
-
-  useEffect(() => {
-    const update = () => {
-      const w = window.innerWidth;
-      setPerPage(w < 640 ? 1 : w < 1024 ? 2 : 3);
-    };
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
-
-  const pages = [];
-  for (let i = 0; i < posts.length; i += perPage) {
-    pages.push(posts.slice(i, i + perPage));
-  }
-
-  const current = Math.min(page, pages.length - 1);
-
   return (
-    <div className="w-full max-w-6xl mx-auto px-6">
-      {/* trilho */}
-      <div className="overflow-hidden">
-        <div
-          className="flex transition-transform duration-500 ease-in-out"
-          style={{ transform: `translateX(-${current * 100}%)` }}
-        >
-          {pages.map((group, i) => (
-            <div
-              key={i}
-              className="w-full shrink-0 grid gap-6"
-              style={{ gridTemplateColumns: `repeat(${perPage}, minmax(0, 1fr))` }}
-            >
-              {group.map((post) => (
-                <article key={post.id} className="text-left">
-                  <img
-                    src={post.image}
-                    alt={post.title}
-                    className="w-full aspect-[3/2] object-cover rounded-lg shadow-md"
-                  />
-                  <h3 className="mt-1 text-lg font-semibold text-gray-900 leading-snug">
-                    {post.title}
-                  </h3>
-                </article>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* bolinhas */}
-      <div className="flex justify-center gap-2 mt-10">
-        {pages.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setPage(i)}
-            aria-label={`Ir para página ${i + 1}`}
-            className={`h-2 w-2 rounded-full transition-colors ${
-              i === current ? "bg-blue-600" : "bg-gray-300"
-            }`}
-          />
+    <div className="w-1/2 mx-auto py-6">
+      <Swiper
+        modules={[Navigation, Pagination, Autoplay]}
+        slidesPerView={1} // Mostra apenas 1 slide por vez
+        spaceBetween={30}
+        centeredSlides={true} // Centraliza o slide ativo
+        loop={true}
+        pagination={{ clickable: true }}
+        navigation
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: false,
+        }}
+        className="rounded-2xl"
+      >
+        {slideImages.map((image) => (
+          <SwiperSlide key={image.id}>
+            <img
+              src={image.src}
+              alt={image.alt}
+              width={1000} // Largura original da imagem para otimização
+              height={600} // Altura original da imagem para otimização
+              className="block w-full h-auto rounded-lg object-cover"
+            />
+          </SwiperSlide>
         ))}
-      </div>
+      </Swiper>
     </div>
   );
 }
